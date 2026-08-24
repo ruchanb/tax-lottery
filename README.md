@@ -23,6 +23,27 @@ is the source of truth: <https://prize.ird.gov.np/>.
 OCR suggestions are always editable. If a value cannot be read confidently, the
 field remains blank for manual entry.
 
+## Screenshots
+
+<table>
+  <tr>
+    <th>Home</th>
+    <th>Bill entry and OCR</th>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/home.png" alt="Kar Upahar home screen" width="280"></td>
+    <td><img src="assets/screenshots/bill-entry.png" alt="Empty bill entry form with camera and gallery options" width="280"></td>
+  </tr>
+  <tr>
+    <th>Digital bill</th>
+    <th>Winners</th>
+  </tr>
+  <tr>
+    <td><img src="assets/screenshots/digital-bill.png" alt="Digital payment bill form with optional coupon" width="280"></td>
+    <td><img src="assets/screenshots/winners.png" alt="Official winners information screen" width="280"></td>
+  </tr>
+</table>
+
 ## Repository layout
 
 - `lib/` - Flutter UI, local storage, OCR, IRD integration, and Firebase client.
