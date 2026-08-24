@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Mobile clients use App-Check-protected callable functions. Only the Admin
+    // SDK used by Cloud Functions can access programme records directly.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

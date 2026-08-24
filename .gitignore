@@ -1,0 +1,84 @@
+# Operating system files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Editors and local tooling
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.codex/
+
+# Dart and Flutter generated files
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+.pub-cache/
+build/
+coverage/
+doc/api/
+
+# Flutter version managers
+.fvm/
+.puro/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+*.jks
+*.keystore
+android/key.properties
+android/local.properties
+google-services.json
+GoogleService-Info.plist
+
+# Android generated files
+android/.gradle/
+android/.kotlin/
+android/.cxx/
+android/captures/
+android/build/
+android/app/build/
+android/app/src/main/java/io/flutter/plugins/GeneratedPluginRegistrant.java
+
+# iOS generated files
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+ios/Flutter/.last_build_id
+ios/Flutter/App.framework
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/Generated.xcconfig
+ios/Flutter/flutter_export_environment.sh
+ios/Flutter/flutter_assets/
+ios/Runner/GeneratedPluginRegistrant.*
+ios/**/DerivedData/
+ios/**/xcuserdata/
+
+# Firebase Functions generated files
+functions/node_modules/
+functions/lib/
+functions/coverage/
+functions/.runtimeconfig.json
+
+# Firebase CLI and emulator output
+.firebase/
+firebase-debug*.log
+firestore-debug*.log
+database-debug*.log
+ui-debug*.log
+firebase-export-*/
+
+# Crash reports and temporary logs
+*.log
+hs_err_pid*
+replay_pid*
+*.tmp
+*.swp
+*.swo
