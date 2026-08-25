@@ -13,6 +13,7 @@ is the source of truth: <https://prize.ird.gov.np/>.
 - Android application with an iOS project prepared for future builds.
 - English and Nepali UI.
 - Camera and gallery bill capture.
+- Tap any bill photo for a full-screen viewer with pinch and double-tap zoom.
 - On-device Latin and Devanagari OCR for seller PAN/VAT, bill date, and total.
 - BS and AD bill-date recognition; recognized BS dates are converted to AD.
 - Local SQLite storage for profiles, bill details, photos, statuses, and coupons.

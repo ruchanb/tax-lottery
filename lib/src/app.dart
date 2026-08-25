@@ -10,6 +10,7 @@ import 'ird/ird_enrollment_page.dart';
 import 'models.dart';
 import 'ocr/bill_ocr.dart';
 import 'services/firebase_service.dart';
+import 'widgets/zoomable_image.dart';
 
 class KarUpaharApp extends StatefulWidget {
   const KarUpaharApp({super.key, required this.store, required this.firebase});
@@ -85,6 +86,19 @@ class Copy {
   final AppLanguage language;
   bool get ne => language == AppLanguage.ne;
   String t(String nepali, String english) => ne ? nepali : english;
+}
+
+ZoomableImageLabels billImageLabels(AppLanguage language) {
+  final copy = Copy(language);
+  return ZoomableImageLabels(
+    title: copy.t('बिलको फोटो', 'Bill photo'),
+    open: copy.t('बिलको फोटो पूरा हेर्नुहोस्', 'Open bill photo'),
+    zoomHint: copy.t(
+      'जुम गर्न पिन्च वा दुई पटक थिच्नुहोस्',
+      'Pinch or double-tap to zoom',
+    ),
+    resetZoom: copy.t('जुम रिसेट गर्नुहोस्', 'Reset zoom'),
+  );
 }
 
 class AppLogo extends StatelessWidget {
@@ -665,7 +679,10 @@ class _BillEntryPageState extends State<BillEntryPage> {
                 clipBehavior: Clip.antiAlias,
                 child: _photoPath == null
                     ? const Center(child: Icon(Icons.receipt_long, size: 64))
-                    : Image.file(File(_photoPath!), fit: BoxFit.cover),
+                    : ZoomableImage(
+                        image: FileImage(File(_photoPath!)),
+                        labels: billImageLabels(widget.language),
+                      ),
               ),
             ),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -1021,8 +1038,9 @@ class _BillEntryCard extends StatelessWidget {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(14),
-                        child: Image.file(
-                          File(bill.imagePath),
+                        child: ZoomableImage(
+                          image: FileImage(File(bill.imagePath)),
+                          labels: billImageLabels(language),
                           width: 66,
                           height: 76,
                           fit: BoxFit.cover,
@@ -1310,7 +1328,7 @@ class BillDetailsPage extends StatelessWidget {
                               .titleMedium
                               ?.copyWith(fontWeight: FontWeight.w800)),
                       const Spacer(),
-                      Text(copy.t('जुम गर्न थिच्नुहोस्', 'Pinch to zoom'),
+                      Text(copy.t('पूरा हेर्न थिच्नुहोस्', 'Tap to view'),
                           style: Theme.of(context).textTheme.bodySmall),
                     ],
                   ),
@@ -1319,16 +1337,13 @@ class BillDetailsPage extends StatelessWidget {
                   aspectRatio: 4 / 3,
                   child: ColoredBox(
                     color: Theme.of(context).colorScheme.surfaceContainerLow,
-                    child: InteractiveViewer(
-                      minScale: 1,
-                      maxScale: 5,
-                      child: Image.file(
-                        File(bill.imagePath),
-                        width: double.infinity,
-                        fit: BoxFit.contain,
-                        errorBuilder: (_, __, ___) => const Center(
-                            child: Icon(Icons.broken_image, size: 64)),
-                      ),
+                    child: ZoomableImage(
+                      image: FileImage(File(bill.imagePath)),
+                      labels: billImageLabels(language),
+                      width: double.infinity,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, __, ___) => const Center(
+                          child: Icon(Icons.broken_image, size: 64)),
                     ),
                   ),
                 ),
