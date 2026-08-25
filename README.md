@@ -102,11 +102,39 @@ Useful Android commands:
 
 ```powershell
 flutter build apk --debug
-flutter install -d <device-id>
+.\scripts\install-android-debug.ps1 -DeviceId <device-id>
 ```
 
 The debug APK is generated at
 `build/app/outputs/flutter-apk/app-debug.apk`.
+
+### Preserve device data during development updates
+
+Bill photos, profile information, and enrollment records are stored in the
+application's private on-device storage. Uninstalling the app or clearing its
+storage permanently removes that data.
+
+Always update a development phone with the guarded installer:
+
+```powershell
+.\scripts\install-android-debug.ps1 -DeviceId <device-id>
+```
+
+The script builds the debug APK, confirms its package ID, rejects version
+downgrades, and compares its signing certificate with the installed app before
+using `adb install -r`. If exactly one authorized device is connected,
+`-DeviceId` may be omitted.
+
+To run only the checks against an already-built APK:
+
+```powershell
+.\scripts\install-android-debug.ps1 -DeviceId <device-id> -SkipBuild -VerifyOnly
+```
+
+Do not use `flutter install`, `adb uninstall`, or `adb shell pm clear` on a
+phone containing data that must be retained. If the guarded installer reports a
+package, signing-certificate, or version mismatch, stop and fix the build
+identity. Never uninstall the existing app as a workaround.
 
 For iOS, run on macOS:
 

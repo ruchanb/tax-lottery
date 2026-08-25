@@ -28,6 +28,9 @@ description: Implement, debug, review, test, or document changes in the Kar Upah
 - Isolate changes to the IRD bridge because its DOM and response contract can
   change without notice.
 - Preserve App Check and callable-function boundaries for cloud writes.
+- Install development APK updates with
+  `scripts/install-android-debug.ps1`. Never uninstall or clear an existing app
+  as an automatic response to an update, package, version, or signing failure.
 - Update both Android and iOS native configuration when a Flutter plugin requires
   platform-specific dependencies.
 - Never submit fixture or fabricated data to the production IRD enrollment flow.

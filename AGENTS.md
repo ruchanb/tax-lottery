@@ -37,6 +37,18 @@ These instructions apply to the entire repository.
 - Commit `pubspec.lock` and `functions/package-lock.json` when their declared
   dependencies change.
 
+## Device data safety
+
+- Treat uninstalling the app or clearing its storage as destructive because all
+  profiles, bills, photos, and enrollment records are stored locally.
+- For development-phone updates, use
+  `scripts/install-android-debug.ps1`; do not use `flutter install`,
+  `adb uninstall`, or `adb shell pm clear`.
+- Preserve the Android application ID and signing key across updates.
+- If the guarded installer reports a package, certificate, downgrade, or update
+  incompatibility, stop and diagnose it. Never uninstall the existing app as an
+  automatic fallback.
+
 ## Verification
 
 - Format only changed Dart files with `dart format`.
