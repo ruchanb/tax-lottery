@@ -284,9 +284,17 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   var _index = 0;
+  var _billsActive = true;
   var _refresh = 0;
 
   void _reload() => setState(() => _refresh++);
+
+  void _openActiveBills() {
+    setState(() {
+      _billsActive = true;
+      _index = 1;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -296,11 +304,14 @@ class _HomeShellState extends State<HomeShell> {
           language: widget.language,
           store: widget.store,
           firebase: widget.firebase,
-          onChanged: _reload),
+          onChanged: _reload,
+          onActiveCouponsTap: _openActiveBills),
       BillsPage(
           key: ValueKey(_refresh),
           language: widget.language,
           store: widget.store,
+          active: _billsActive,
+          onActiveChanged: (active) => setState(() => _billsActive = active),
           onChanged: _reload),
       WinnersPage(language: widget.language, firebase: widget.firebase),
     ];
@@ -361,12 +372,14 @@ class DashboardPage extends StatelessWidget {
       required this.language,
       required this.store,
       required this.firebase,
-      required this.onChanged});
+      required this.onChanged,
+      required this.onActiveCouponsTap});
   final UserProfile profile;
   final AppLanguage language;
   final LocalStore store;
   final FirebaseService firebase;
   final VoidCallback onChanged;
+  final VoidCallback onActiveCouponsTap;
 
   @override
   Widget build(BuildContext context) {
@@ -415,10 +428,17 @@ class DashboardPage extends StatelessWidget {
             const SizedBox(height: 16),
             Card(
                 child: ListTile(
+                    onTap: onActiveCouponsTap,
                     leading: const Icon(Icons.confirmation_number_outlined),
                     title: Text(copy.t('सक्रिय कुपन', 'Active coupons')),
-                    trailing: Text('$active',
-                        style: Theme.of(context).textTheme.headlineSmall))),
+                    subtitle: Text(copy.t(
+                        'सक्रिय बिलहरू हेर्नुहोस्', 'View active bills')),
+                    trailing: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Text('$active',
+                          style: Theme.of(context).textTheme.headlineSmall),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.chevron_right),
+                    ]))),
             const SizedBox(height: 12),
             Card(
                 child: Padding(
@@ -884,9 +904,13 @@ class BillsPage extends StatefulWidget {
       {super.key,
       required this.language,
       required this.store,
+      required this.active,
+      required this.onActiveChanged,
       required this.onChanged});
   final AppLanguage language;
   final LocalStore store;
+  final bool active;
+  final ValueChanged<bool> onActiveChanged;
   final VoidCallback onChanged;
 
   @override
@@ -894,8 +918,6 @@ class BillsPage extends StatefulWidget {
 }
 
 class _BillsPageState extends State<BillsPage> {
-  var _active = true;
-
   Future<void> _deleteBill(BillEntry bill) async {
     final confirmed = await showDialog<bool>(
       context: context,
@@ -928,8 +950,8 @@ class _BillsPageState extends State<BillsPage> {
         ButtonSegment(value: true, label: Text(copy.t('सक्रिय', 'Active'))),
         ButtonSegment(value: false, label: Text(copy.t('इतिहास', 'History')))
       ], selected: {
-        _active
-      }, onSelectionChanged: (value) => setState(() => _active = value.first)),
+        widget.active
+      }, onSelectionChanged: (value) => widget.onActiveChanged(value.first)),
       Expanded(
           child: FutureBuilder<List<BillEntry>>(
         future: widget.store.getBills(),
@@ -937,8 +959,9 @@ class _BillsPageState extends State<BillsPage> {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
           }
-          final bills =
-              snapshot.data!.where((bill) => bill.isActive == _active).toList();
+          final bills = snapshot.data!
+              .where((bill) => bill.isActive == widget.active)
+              .toList();
           if (bills.isEmpty) {
             return Center(child: Text(copy.t('कुनै बिल छैन', 'No bills here')));
           }
